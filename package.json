@@ -1,6 +1,6 @@
 {
-  "name": "zrender",
-  "version": "4.0.4",
+  "name": "@okfe/zrender",
+  "version": "4.0.6",
   "description": "A lightweight canvas library.",
   "keywords": [
     "canvas",

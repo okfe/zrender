@@ -9808,6 +9808,9 @@ var Animation = function (options) {
 
     this.stage = options.stage || {};
 
+    // 动画的间隔时间，为了降低CPU占用率
+    this._animationLoopDelta = options.animationLoopDelta || 0;
+
     this.onframe = options.onframe || function() {};
 
     // private properties
@@ -9926,11 +9929,19 @@ Animation.prototype = {
         this._running = true;
 
         function step() {
-            if (self._running) {
-
-                requestAnimationFrame(step);
-
-                !self._paused && self._update();
+            if (self._running) {  
+                if (-1 === self._animationLoopDelta) {
+                    return;
+                }  
+                if (0 === self._animationLoopDelta) {
+                    requestAnimationFrame(step);
+                    !self._paused && self._update();
+                } else {
+                    setTimeout(function () {
+                        requestAnimationFrame(step);
+                        !self._paused && self._update();   
+                    }, self._animationLoopDelta);
+                }
             }
         }
 
@@ -10627,6 +10638,7 @@ var ZRender = function (id, dom, opts) {
      * @type {module:zrender/animation/Animation}
      */
     this.animation = new Animation({
+        animationLoopDelta: opts.animationLoopDelta,
         stage: {
             update: bind(this.flush, this)
         }
