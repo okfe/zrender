@@ -137,6 +137,7 @@ var ZRender = function (id, dom, opts) {
      * @type {module:zrender/animation/Animation}
      */
     this.animation = new Animation({
+        animationLoopDelta: opts.animationLoopDelta,
         stage: {
             update: zrUtil.bind(this.flush, this)
         }
